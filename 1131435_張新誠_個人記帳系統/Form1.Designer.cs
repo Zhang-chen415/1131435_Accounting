@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.labelTotal = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.檔案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,15 +47,26 @@
             this.txtSearchNote = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbFilterCategory = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtBudget = new System.Windows.Forms.TextBox();
+            this.lblBudgetStatus = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecords)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelTotal
             // 
             this.labelTotal.AutoSize = true;
             this.labelTotal.Font = new System.Drawing.Font("新細明體", 12F);
-            this.labelTotal.Location = new System.Drawing.Point(-3, 296);
+            this.labelTotal.Location = new System.Drawing.Point(0, 272);
             this.labelTotal.Name = "labelTotal";
             this.labelTotal.Size = new System.Drawing.Size(127, 16);
             this.labelTotal.TabIndex = 9;
@@ -65,7 +79,7 @@
             this.編輯ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(306, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(371, 24);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -131,13 +145,13 @@
             this.colCategory,
             this.colAmount,
             this.colNote});
-            this.dgvRecords.Location = new System.Drawing.Point(0, 53);
+            this.dgvRecords.Location = new System.Drawing.Point(3, 29);
             this.dgvRecords.MultiSelect = false;
             this.dgvRecords.Name = "dgvRecords";
             this.dgvRecords.ReadOnly = true;
             this.dgvRecords.RowTemplate.Height = 24;
             this.dgvRecords.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvRecords.Size = new System.Drawing.Size(306, 233);
+            this.dgvRecords.Size = new System.Drawing.Size(358, 233);
             this.dgvRecords.TabIndex = 11;
             this.dgvRecords.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -164,7 +178,7 @@
             // 
             // txtSearchNote
             // 
-            this.txtSearchNote.Location = new System.Drawing.Point(194, 27);
+            this.txtSearchNote.Location = new System.Drawing.Point(249, 3);
             this.txtSearchNote.Name = "txtSearchNote";
             this.txtSearchNote.Size = new System.Drawing.Size(112, 22);
             this.txtSearchNote.TabIndex = 12;
@@ -174,7 +188,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("新細明體", 10F);
-            this.label1.Location = new System.Drawing.Point(130, 30);
+            this.label1.Location = new System.Drawing.Point(180, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(63, 14);
             this.label1.TabIndex = 13;
@@ -193,22 +207,103 @@
             "收入",
             "娛樂",
             "其他支出"});
-            this.cbFilterCategory.Location = new System.Drawing.Point(3, 27);
+            this.cbFilterCategory.Location = new System.Drawing.Point(6, 3);
             this.cbFilterCategory.Name = "cbFilterCategory";
             this.cbFilterCategory.Size = new System.Drawing.Size(121, 20);
             this.cbFilterCategory.TabIndex = 14;
             this.cbFilterCategory.SelectedIndexChanged += new System.EventHandler(this.cbFilterCategory_SelectedIndexChanged);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(202, 276);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "預算上限";
+            // 
+            // txtBudget
+            // 
+            this.txtBudget.Location = new System.Drawing.Point(261, 272);
+            this.txtBudget.Name = "txtBudget";
+            this.txtBudget.Size = new System.Drawing.Size(100, 22);
+            this.txtBudget.TabIndex = 16;
+            this.txtBudget.TextChanged += new System.EventHandler(this.txtBudget_TextChanged);
+            this.txtBudget.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBudget_KeyDown);
+            this.txtBudget.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBudget_KeyPress);
+            this.txtBudget.Leave += new System.EventHandler(this.txtBudget_Leave);
+            // 
+            // lblBudgetStatus
+            // 
+            this.lblBudgetStatus.AutoSize = true;
+            this.lblBudgetStatus.Location = new System.Drawing.Point(6, 295);
+            this.lblBudgetStatus.Name = "lblBudgetStatus";
+            this.lblBudgetStatus.Size = new System.Drawing.Size(0, 12);
+            this.lblBudgetStatus.TabIndex = 17;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(0, 27);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(375, 338);
+            this.tabControl1.TabIndex = 18;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.cbFilterCategory);
+            this.tabPage1.Controls.Add(this.lblBudgetStatus);
+            this.tabPage1.Controls.Add(this.labelTotal);
+            this.tabPage1.Controls.Add(this.txtBudget);
+            this.tabPage1.Controls.Add(this.dgvRecords);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.txtSearchNote);
+            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(367, 312);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "帳務明細";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.chart1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(313, 312);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "統計圖表";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // chart1
+            // 
+            chartArea6.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chart1.Legends.Add(legend6);
+            this.chart1.Location = new System.Drawing.Point(3, 3);
+            this.chart1.Name = "chart1";
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series6.IsValueShownAsLabel = true;
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chart1.Series.Add(series6);
+            this.chart1.Size = new System.Drawing.Size(300, 300);
+            this.chart1.TabIndex = 0;
+            this.chart1.Text = "chart1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 321);
-            this.Controls.Add(this.cbFilterCategory);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtSearchNote);
-            this.Controls.Add(this.dgvRecords);
-            this.Controls.Add(this.labelTotal);
+            this.ClientSize = new System.Drawing.Size(371, 361);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -218,6 +313,11 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecords)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -240,6 +340,13 @@
         private System.Windows.Forms.TextBox txtSearchNote;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbFilterCategory;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtBudget;
+        private System.Windows.Forms.Label lblBudgetStatus;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
     }
 }
 

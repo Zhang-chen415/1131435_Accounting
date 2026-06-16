@@ -51,16 +51,56 @@ namespace _1131435_張新誠_個人記帳系統
             // 篩選完畫面後，重新計算「目前看得到」的總金額！
             UpdateTotalAmount();
         }
-        private void UpdateTotalAmount()
+        private void UpdateChart()
         {
-            long total = 0;
+            // 1. 建立一個字典(Dictionary)來儲存各支出的加總
+            Dictionary<string, long> expenseStats = new Dictionary<string, long>()
+    {
+        { "食", 0 }, { "衣", 0 }, { "住", 0 }, { "行", 0 }, { "娛樂", 0 }, { "其他支出", 0 }
+    };
 
-            // 依序檢查 DataGridView 裡面的每一列 (Row)
+            // 2. 掃描 DataGridView 表格累加金額
             foreach (DataGridViewRow row in dgvRecords.Rows)
             {
-                // 跳過還沒完全建立的空白列
                 if (row.Cells["colCategory"].Value == null) continue;
 
+                string category = row.Cells["colCategory"].Value.ToString();
+                string amountStr = row.Cells["colAmount"].Value.ToString();
+
+                if (long.TryParse(amountStr, out long amount))
+                {
+                    // 如果是支出種類，就加進對應的分類裡
+                    if (expenseStats.ContainsKey(category))
+                    {
+                        expenseStats[category] += amount;
+                    }
+                }
+            }
+
+            // 3. 清空圖表舊資料
+            chart1.Series["Series1"].Points.Clear();
+
+            // 4. 將有花錢的項目塞進圓餅圖裡
+            foreach (var pair in expenseStats)
+            {
+                if (pair.Value > 0) // 金額大於 0 元的才顯示，畫面比較乾淨
+                {
+                    // 新增資料點（X軸是類別名稱如"食"，Y軸是總金額）
+                    int pointIndex = chart1.Series["Series1"].Points.AddXY(pair.Key, pair.Value);
+
+                    // 讓圓餅圖上同時顯示「類別」與「金額」（例如：食 (500元)）
+                    chart1.Series["Series1"].Points[pointIndex].Label = $"{pair.Key}\n({pair.Value}元)";
+                }
+            }
+        }
+        private void UpdateTotalAmount(bool showAlert = false)
+        {
+            long total = 0;
+            long totalExpense = 0;
+
+            foreach (DataGridViewRow row in dgvRecords.Rows)
+            {
+                if (row.Cells["colCategory"].Value == null) continue;
                 if (!row.Visible) continue;
 
                 string category = row.Cells["colCategory"].Value.ToString();
@@ -68,13 +108,51 @@ namespace _1131435_張新誠_個人記帳系統
 
                 if (long.TryParse(amountStr, out long amount))
                 {
-                    if (category == "收入") total += amount;
-                    else total -= amount;
+                    if (category == "收入")
+                    {
+                        total += amount;
+                    }
+                    else
+                    {
+                        total -= amount;
+                        totalExpense += amount;
+                    }
                 }
             }
 
+            // 更新總金額顯示
             labelTotal.Text = $"目前總金額：{total} 元";
             labelTotal.ForeColor = (total < 0) ? System.Drawing.Color.Red : System.Drawing.Color.Black;
+
+            // ======= 預算檢查邏輯 =======
+            if (long.TryParse(txtBudget.Text, out long budgetLimit) && budgetLimit > 0)
+            {
+                if (totalExpense > budgetLimit)
+                {
+                    lblBudgetStatus.Text = $"⚠️ 已超支！(總支出：{totalExpense} / 預算：{budgetLimit})";
+                    lblBudgetStatus.ForeColor = System.Drawing.Color.Red;
+
+                    // 💡 修改點：只有當傳入的 showAlert 為 true 時，才跳出 MessageBox 彈窗！
+                    if (showAlert)
+                    {
+                        MessageBox.Show($"警告：您本月的總支出 ({totalExpense} 元) 已經超過設定的預算上限 ({budgetLimit} 元)！請節約開支。",
+                                        "預算超額警示", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else
+                {
+                    lblBudgetStatus.Text = $"✅ 預算內 (總支出：{totalExpense} / 預算：{budgetLimit})";
+                    lblBudgetStatus.ForeColor = System.Drawing.Color.Green;
+                }
+            }
+            else
+            {
+                lblBudgetStatus.Text = "（未設定預算上限）";
+                lblBudgetStatus.ForeColor = System.Drawing.Color.Gray;
+            }
+
+            // 更新圖表
+            UpdateChart();
         }
         
 
@@ -97,6 +175,7 @@ namespace _1131435_張新誠_個人記帳系統
 
                 UpdateTotalAmount();
                 isUnsaved = true; // 觸發未存檔警示
+                UpdateTotalAmount(true);
             }
         }
 
@@ -282,6 +361,36 @@ namespace _1131435_張新誠_個人記帳系統
         private void cbFilterCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             ApplyFilter();
+        }
+
+        private void txtBudget_TextChanged(object sender, EventArgs e)
+        {
+            UpdateTotalAmount();
+        }
+
+        private void txtBudget_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // 只能輸入數字與退格鍵
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtBudget_KeyDown(object sender, KeyEventArgs e)
+        {
+            // 如果使用者按下的是 Enter 鍵，代表輸入完了
+            if (e.KeyCode == Keys.Enter)
+            {
+                UpdateTotalAmount(true); // 執行檢查，如果超支就跳彈窗
+                e.SuppressKeyPress = true; // 防止視窗發出叮的一聲警告音
+            }
+        }
+
+        private void txtBudget_Leave(object sender, EventArgs e)
+        {
+            // 當使用者打完字，滑鼠點去點別的地方（離開輸入框）時，也進行一次正式檢查
+            UpdateTotalAmount(true);
         }
     }
 }
