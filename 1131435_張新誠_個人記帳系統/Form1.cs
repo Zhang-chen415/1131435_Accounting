@@ -13,6 +13,7 @@ namespace _1131435_張新誠_個人記帳系統
 {
     public partial class Form1 : Form
     {
+        private bool x = false;
         private bool isUnsaved = false;
         public Form1()
         {
@@ -378,32 +379,41 @@ namespace _1131435_張新誠_個人記帳系統
 
         private void txtBudget_TextChanged(object sender, EventArgs e)
         {
+            x = true;
             UpdateTotalAmount();
         }
 
         private void txtBudget_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // 只能輸入數字與退格鍵
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-            {
-                e.Handled = true;
-            }
+                // 只能輸入數字與退格鍵
+                if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+                {
+                    e.Handled = true;
+                }
         }
 
         private void txtBudget_KeyDown(object sender, KeyEventArgs e)
         {
-            // 如果使用者按下的是 Enter 鍵，代表輸入完了
-            if (e.KeyCode == Keys.Enter)
+            if (x)
             {
-                UpdateTotalAmount(true); // 執行檢查，如果超支就跳彈窗
-                e.SuppressKeyPress = true; // 防止視窗發出叮的一聲警告音
+                // 如果使用者按下的是 Enter 鍵，代表輸入完了
+                if (e.KeyCode == Keys.Enter)
+                {
+                    UpdateTotalAmount(true); // 執行檢查，如果超支就跳彈窗
+                    e.SuppressKeyPress = true; // 防止視窗發出叮的一聲警告音
+                    x = false;
+                }
             }
         }
 
         private void txtBudget_Leave(object sender, EventArgs e)
         {
-            // 當使用者打完字，滑鼠點去點別的地方（離開輸入框）時，也進行一次正式檢查
-            UpdateTotalAmount(true);
+            if (x)
+            {
+                // 當使用者打完字，滑鼠點去點別的地方（離開輸入框）時，也進行一次正式檢查
+                UpdateTotalAmount(true);
+                x = false;
+            }
         }
 
         private void 新增新檔ToolStripMenuItem_Click(object sender, EventArgs e)
