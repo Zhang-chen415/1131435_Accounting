@@ -19,154 +19,146 @@ namespace _1131435_張新誠_個人記帳系統
             InitializeComponent();
         }
 
-        
+        private void ApplyFilter()
+        {
+            // 取得目前輸入的關鍵字（轉小寫，去前後空格）
+            string keyword = txtSearchNote.Text.Trim().ToLower();
+
+            // 取得目前下拉選單選了什麼類別
+            string selectedCategory = cbFilterCategory.SelectedItem?.ToString() ?? "全部";
+
+            // 暫時解除 DataGridView 正在被滑鼠點選的行，避免隱藏選中行時報錯
+            dgvRecords.CurrentCell = null;
+
+            foreach (DataGridViewRow row in dgvRecords.Rows)
+            {
+                // 跳過完全空白的新增列
+                if (row.Cells["colCategory"].Value == null) continue;
+
+                string category = row.Cells["colCategory"].Value.ToString();
+                string note = row.Cells["colNote"].Value.ToString().ToLower();
+
+                // 1. 比對類別是否符合 (如果是選"全部"、或者列的類別跟選取的一樣，即為合法的類別)
+                bool isCategoryMatch = (selectedCategory == "全部" || category == selectedCategory);
+
+                // 2. 比對備註關鍵字是否符合 (如果是空的、或者備註包含關鍵字，即為合法的關鍵字)
+                bool isKeywordMatch = (string.IsNullOrEmpty(keyword) || note.Contains(keyword));
+
+                // 3. 只有當兩個條件同時滿足時，這一列才顯示，否則隱藏
+                row.Visible = (isCategoryMatch && isKeywordMatch);
+            }
+
+            // 篩選完畫面後，重新計算「目前看得到」的總金額！
+            UpdateTotalAmount();
+        }
         private void UpdateTotalAmount()
         {
-            int total = 0;
+            long total = 0;
 
-            // 依序檢查 ListBox 裡面的每一行紀錄
-            foreach (var item in listBoxRecords.Items)
+            // 依序檢查 DataGridView 裡面的每一列 (Row)
+            foreach (DataGridViewRow row in dgvRecords.Rows)
             {
-                string record = item.ToString();
-                string[] parts = record.Split(',');
+                // 跳過還沒完全建立的空白列
+                if (row.Cells["colCategory"].Value == null) continue;
 
-                if (parts.Length == 3)
+                if (!row.Visible) continue;
+
+                string category = row.Cells["colCategory"].Value.ToString();
+                string amountStr = row.Cells["colAmount"].Value.ToString();
+
+                if (long.TryParse(amountStr, out long amount))
                 {
-                    string category = parts[0];
-                    // 嘗試將金額字串轉成整數，轉換成功才計算（防呆）
-                    if (int.TryParse(parts[1], out int amount))
-                    {
-                        // 如果類別是 "收入"，就加錢；其餘（食衣住行）都算支出，扣錢
-                        if (category == "收入")
-                        {
-                            total += amount;
-                        }
-                        else
-                        {
-                            total -= amount;
-                        }
-                    }
+                    if (category == "收入") total += amount;
+                    else total -= amount;
                 }
             }
 
-            // 更新右下角或下方的 Label 顯示
             labelTotal.Text = $"目前總金額：{total} 元";
-
-            // 亮點功能：如果透支（總金額變負數），就把字體變成紅色提醒；正數就維持黑色
-            if (total < 0)
-            {
-                labelTotal.ForeColor = System.Drawing.Color.Red;
-            }
-            else
-            {
-                labelTotal.ForeColor = System.Drawing.Color.Black;
-            }
+            labelTotal.ForeColor = (total < 0) ? System.Drawing.Color.Red : System.Drawing.Color.Black;
         }
         
 
         private void Form1_Load(object sender, EventArgs e)
         {
             UpdateTotalAmount();
+            cbFilterCategory.SelectedIndex = 0;
         }
 
 
         private void 新增帳目ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 1. 實體化 Form2 視窗
             Form2 inputForm = new Form2();
-            inputForm.Text = "新增記帳紀錄"; // 設定新視窗的標題
+            inputForm.Text = "新增記帳紀錄";
 
-            // 2. 用 ShowDialog() 彈出視窗（這會強制使用者必須先處理這個小視窗）
-            // 如果使用者在 Form2 按下了「確定」
             if (inputForm.ShowDialog() == DialogResult.OK)
             {
-                // 3. 從 Form2 物件中，把剛才填好的屬性值撈出來
-                string category = inputForm.Category;
-                string amount = inputForm.Amount;
-                string note = inputForm.Note;
+                // 直接將類別、金額、備註作為三個獨立參數塞進表格
+                dgvRecords.Rows.Add(inputForm.Category, inputForm.Amount, inputForm.Note);
 
-                // 4. 接下來就是你原本熟悉的新增邏輯囉！
-                string recordLine = $"{category},{amount},{note}";
-                listBoxRecords.Items.Add(recordLine);
-
-                // 更新總金額
                 UpdateTotalAmount();
-                isUnsaved = true;
+                isUnsaved = true; // 觸發未存檔警示
             }
         }
 
         private void 刪除選取紀錄ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 防呆：檢查使用者有沒有在 ListBox 點選任何項目
-            if (listBoxRecords.SelectedIndex == -1)
+            // 防呆：檢查目前有沒有選中任何一列
+            if (dgvRecords.SelectedRows.Count == 0)
             {
-                MessageBox.Show("請先在清單中點選一筆要刪除的紀錄！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                isUnsaved = true;
+                MessageBox.Show("請先在表格中點選一筆要刪除的紀錄！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 詢問使用者是否確定要刪除（做防呆確認，UI 介面大加分項目）
             DialogResult result = MessageBox.Show("確定要刪除這筆紀錄嗎？", "確認刪除", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
-                // 從 ListBox 中移除目前選中的那一項
-                listBoxRecords.Items.RemoveAt(listBoxRecords.SelectedIndex);
+                // 移除被選取的那一列
+                dgvRecords.Rows.Remove(dgvRecords.SelectedRows[0]);
 
-                // 重新計算並更新總金額 Label
                 UpdateTotalAmount();
-
+                isUnsaved = true;
                 MessageBox.Show("紀錄已成功刪除！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void 更新選取紀錄ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 1. 防呆：檢查有沒有點選要修改的項目
-            if (listBoxRecords.SelectedIndex == -1)
+            if (dgvRecords.SelectedRows.Count == 0)
             {
-                MessageBox.Show("請先在清單中點選一筆要修改的紀錄！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                isUnsaved = true;
+                MessageBox.Show("請先在表格中點選一筆要修改的紀錄！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2. 抓取目前選中的舊字串（例如："食,100,午餐"）
-            int selectedIndex = listBoxRecords.SelectedIndex;
-            string selectedRecord = listBoxRecords.SelectedItem.ToString();
-            string[] parts = selectedRecord.Split(',');
+            // 抓出目前選中的那一列
+            DataGridViewRow selectedRow = dgvRecords.SelectedRows[0];
 
-            if (parts.Length == 3)
+            Form2 editForm = new Form2();
+            editForm.Text = "編輯記帳紀錄";
+
+            // 直接從儲存格把舊資料傳入 Form2
+            editForm.SetOriginalData(
+                selectedRow.Cells["colCategory"].Value.ToString(),
+                selectedRow.Cells["colAmount"].Value.ToString(),
+                selectedRow.Cells["colNote"].Value.ToString()
+            );
+
+            if (editForm.ShowDialog() == DialogResult.OK)
             {
-                // 3. 實體化 Form2 小視窗
-                Form2 editForm = new Form2();
-                editForm.Text = "編輯記帳紀錄"; // 標題改成編輯
+                // 將使用者修改後的新資料更新回原欄位
+                selectedRow.Cells["colCategory"].Value = editForm.Category;
+                selectedRow.Cells["colAmount"].Value = editForm.Amount;
+                selectedRow.Cells["colNote"].Value = editForm.Note;
 
-                // 4. 關鍵：把原本舊的「類別、金額、備註」塞進 Form2 的輸入框裡
-                editForm.SetOriginalData(parts[0], parts[1], parts[2]);
-
-                // 5. 彈出 Form2 視窗，並等待使用者按下「確定」
-                if (editForm.ShowDialog() == DialogResult.OK)
-                {
-                    // 6. 撈出使用者修改後的新資料
-                    string newCategory = editForm.Category;
-                    string newAmount = editForm.Amount;
-                    string newNote = editForm.Note;
-
-                    // 7. 組合成新字串，並替換掉 ListBox 裡原本位置的那一項
-                    string updatedLine = $"{newCategory},{newAmount},{newNote}";
-                    listBoxRecords.Items[selectedIndex] = updatedLine;
-
-                    // 8. 重新計算並更新總金額 Label
-                    UpdateTotalAmount();
-
-                    MessageBox.Show("紀錄已成功更新！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                UpdateTotalAmount();
+                isUnsaved = true;
+                MessageBox.Show("紀錄已成功更新！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void 另存新檔ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (listBoxRecords.Items.Count == 0)
+            if (dgvRecords.Rows.Count == 0)
             {
                 MessageBox.Show("目前沒有任何記帳紀錄可以儲存！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -183,11 +175,16 @@ namespace _1131435_張新誠_個人記帳系統
                 {
                     using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName, false))
                     {
-                        foreach (var item in listBoxRecords.Items)
+                        foreach (DataGridViewRow row in dgvRecords.Rows)
                         {
-                            sw.WriteLine(item.ToString());
+                            if (row.Cells["colCategory"].Value != null)
+                            {
+                                string line = $"{row.Cells["colCategory"].Value},{row.Cells["colAmount"].Value},{row.Cells["colNote"].Value}";
+                                sw.WriteLine(line);
+                            }
                         }
                     }
+                    isUnsaved = false; // 存檔成功，清除未存檔狀態
                     MessageBox.Show("檔案另存成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
@@ -207,23 +204,28 @@ namespace _1131435_張新誠_個人記帳系統
             {
                 try
                 {
-                    listBoxRecords.Items.Clear();
+                    dgvRecords.Rows.Clear();
 
                     using (StreamReader sr = new StreamReader(openFileDialog.FileName))
                     {
                         string line;
+                        // 修正點：必須使用 while 迴圈一行行指派給 line，直到檔案結束
                         while ((line = sr.ReadLine()) != null)
                         {
                             if (!string.IsNullOrWhiteSpace(line))
                             {
-                                listBoxRecords.Items.Add(line);
+                                string[] parts = line.Split(',');
+                                if (parts.Length == 3)
+                                {
+                                    dgvRecords.Rows.Add(parts[0], parts[1], parts[2]);
+                                }
                             }
                         }
                     }
 
                     // 讀取完畢後立刻重新計算總金額
                     UpdateTotalAmount();
-                    isUnsaved = false;
+                    isUnsaved = false; // 剛讀入的歷史檔案視為已儲存狀態
                     MessageBox.Show("檔案載入成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
@@ -265,6 +267,21 @@ namespace _1131435_張新誠_個人記帳系統
                 }
                 // 如果使用者點選「否」，就什麼都不做，程式會依循預設流程直接關閉，舊資料直接消失
             }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void txtSearchNote_TextChanged(object sender, EventArgs e)
+        {
+            ApplyFilter();
+        }
+
+        private void cbFilterCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ApplyFilter();
         }
     }
 }

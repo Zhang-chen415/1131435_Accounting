@@ -18,8 +18,10 @@ namespace _1131435_張新誠_個人記帳系統
         public Form2()
         {
             InitializeComponent();
-            comboBoxCategory.Items.AddRange(new object[] { "食", "衣", "住", "行", "收入" });
-            comboBoxCategory.SelectedIndex = 0; // 預設選第一個
+            if (comboBoxCategory.Items.Count > 0)
+            {
+                comboBoxCategory.SelectedIndex = 0; // 預設選第一個項目
+            }
         }
         public void SetOriginalData(string category, string amount, string note)
         {
@@ -54,6 +56,19 @@ namespace _1131435_張新誠_個人記帳系統
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void textBoxAmount_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxAmount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

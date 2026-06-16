@@ -41,6 +41,14 @@
             // 
             this.comboBoxCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCategory.FormattingEnabled = true;
+            this.comboBoxCategory.Items.AddRange(new object[] {
+            "食",
+            "衣",
+            "住",
+            "行",
+            "收入",
+            "娛樂",
+            "其他支出"});
             this.comboBoxCategory.Location = new System.Drawing.Point(70, 12);
             this.comboBoxCategory.Name = "comboBoxCategory";
             this.comboBoxCategory.Size = new System.Drawing.Size(121, 20);
@@ -49,9 +57,12 @@
             // textBoxAmount
             // 
             this.textBoxAmount.Location = new System.Drawing.Point(81, 52);
+            this.textBoxAmount.MaxLength = 20;
             this.textBoxAmount.Name = "textBoxAmount";
             this.textBoxAmount.Size = new System.Drawing.Size(100, 22);
             this.textBoxAmount.TabIndex = 2;
+            this.textBoxAmount.TextChanged += new System.EventHandler(this.textBoxAmount_TextChanged);
+            this.textBoxAmount.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxAmount_KeyPress);
             // 
             // textBoxNote
             // 
