@@ -405,5 +405,47 @@ namespace _1131435_張新誠_個人記帳系統
             // 當使用者打完字，滑鼠點去點別的地方（離開輸入框）時，也進行一次正式檢查
             UpdateTotalAmount(true);
         }
+
+        private void 新增新檔ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // 1. 安全檢查：如果目前有沒存檔的資料，先問使用者要不要存
+            if (isUnsaved)
+            {
+                DialogResult result = MessageBox.Show(
+                    "您目前有尚未儲存的變動，是否要在開啟新檔案前進行儲存？\n\n[是]：進行存檔\n[否]：放棄變動並開新檔\n[取消]：回到程式",
+                    "提醒",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    // 幫他觸發另存新檔
+                    另存新檔ToolStripMenuItem_Click(sender, e);
+
+                    // 如果存完檔使用者按取消，或者依然是未存檔狀態，就攔截不開新檔
+                    if (isUnsaved) return;
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    // 使用者點取消，直接結束這個 function，什麼都不做
+                    return;
+                }
+            }
+
+            // 2. 開始執行「全畫面清空重設」
+            dgvRecords.Rows.Clear();        // 清空表格明細
+            txtBudget.Text = "";            // 清空預算輸入框
+            txtSearchNote.Text = "";        // 清空搜尋備註框
+            cbFilterCategory.SelectedIndex = 0; // 分類選單回歸到「全部」
+
+            // 3. 重新計算並更新總金額與圖表（此時會自動歸零、圖表會清空）
+            UpdateTotalAmount();
+
+            // 4. 重設變數：目前是全新乾淨的檔案，標記為已儲存狀態
+            isUnsaved = false;
+
+            MessageBox.Show("已建立新的空白帳本！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

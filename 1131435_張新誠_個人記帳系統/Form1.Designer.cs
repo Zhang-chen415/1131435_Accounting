@@ -41,6 +41,9 @@
             this.更新選取紀錄ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.刪除選取紀錄ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dgvRecords = new System.Windows.Forms.DataGridView();
+            this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtSearchNote = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbFilterCategory = new System.Windows.Forms.ComboBox();
@@ -51,9 +54,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.新增新檔ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecords)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -87,7 +88,8 @@
             // 
             this.檔案ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.開啟檔案ToolStripMenuItem,
-            this.另存新檔ToolStripMenuItem});
+            this.另存新檔ToolStripMenuItem,
+            this.新增新檔ToolStripMenuItem});
             this.檔案ToolStripMenuItem.Name = "檔案ToolStripMenuItem";
             this.檔案ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.檔案ToolStripMenuItem.Text = "檔案";
@@ -119,21 +121,21 @@
             // 新增帳目ToolStripMenuItem
             // 
             this.新增帳目ToolStripMenuItem.Name = "新增帳目ToolStripMenuItem";
-            this.新增帳目ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.新增帳目ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.新增帳目ToolStripMenuItem.Text = "新增帳目";
             this.新增帳目ToolStripMenuItem.Click += new System.EventHandler(this.新增帳目ToolStripMenuItem_Click);
             // 
             // 更新選取紀錄ToolStripMenuItem
             // 
             this.更新選取紀錄ToolStripMenuItem.Name = "更新選取紀錄ToolStripMenuItem";
-            this.更新選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.更新選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.更新選取紀錄ToolStripMenuItem.Text = "更新選取紀錄";
             this.更新選取紀錄ToolStripMenuItem.Click += new System.EventHandler(this.更新選取紀錄ToolStripMenuItem_Click);
             // 
             // 刪除選取紀錄ToolStripMenuItem
             // 
             this.刪除選取紀錄ToolStripMenuItem.Name = "刪除選取紀錄ToolStripMenuItem";
-            this.刪除選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.刪除選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.刪除選取紀錄ToolStripMenuItem.Text = "刪除選取紀錄";
             this.刪除選取紀錄ToolStripMenuItem.Click += new System.EventHandler(this.刪除選取紀錄ToolStripMenuItem_Click);
             // 
@@ -154,6 +156,27 @@
             this.dgvRecords.Size = new System.Drawing.Size(358, 233);
             this.dgvRecords.TabIndex = 11;
             this.dgvRecords.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // colCategory
+            // 
+            this.colCategory.HeaderText = "類別";
+            this.colCategory.Name = "colCategory";
+            this.colCategory.ReadOnly = true;
+            this.colCategory.Width = 80;
+            // 
+            // colAmount
+            // 
+            this.colAmount.HeaderText = "金額";
+            this.colAmount.Name = "colAmount";
+            this.colAmount.ReadOnly = true;
+            this.colAmount.Width = 80;
+            // 
+            // colNote
+            // 
+            this.colNote.HeaderText = "備註";
+            this.colNote.Name = "colNote";
+            this.colNote.ReadOnly = true;
+            this.colNote.Width = 160;
             // 
             // txtSearchNote
             // 
@@ -278,26 +301,12 @@
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
-            // colCategory
+            // 新增新檔ToolStripMenuItem
             // 
-            this.colCategory.HeaderText = "類別";
-            this.colCategory.Name = "colCategory";
-            this.colCategory.ReadOnly = true;
-            this.colCategory.Width = 80;
-            // 
-            // colAmount
-            // 
-            this.colAmount.HeaderText = "金額";
-            this.colAmount.Name = "colAmount";
-            this.colAmount.ReadOnly = true;
-            this.colAmount.Width = 80;
-            // 
-            // colNote
-            // 
-            this.colNote.HeaderText = "備註";
-            this.colNote.Name = "colNote";
-            this.colNote.ReadOnly = true;
-            this.colNote.Width = 160;
+            this.新增新檔ToolStripMenuItem.Name = "新增新檔ToolStripMenuItem";
+            this.新增新檔ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.新增新檔ToolStripMenuItem.Text = "新增新檔";
+            this.新增新檔ToolStripMenuItem.Click += new System.EventHandler(this.新增新檔ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -348,6 +357,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCategory;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
+        private System.Windows.Forms.ToolStripMenuItem 新增新檔ToolStripMenuItem;
     }
 }
 
