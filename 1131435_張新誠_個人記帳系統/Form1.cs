@@ -246,7 +246,7 @@ namespace _1131435_張新誠_個人記帳系統
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "文字檔案 (*.txt)|*.txt|CSV 檔案 (*.csv)|*.csv";
             saveFileDialog.Title = "將記帳紀錄另存新檔";
-            saveFileDialog.FileName = "我的帳本"; // 預設檔名
+            saveFileDialog.FileName = "我的帳本";
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -254,6 +254,11 @@ namespace _1131435_張新誠_個人記帳系統
                 {
                     using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName, false))
                     {
+                        // 在檔案的最前方，固定塞入目前設定的預算數字
+                        string budgetText = string.IsNullOrWhiteSpace(txtBudget.Text) ? "0" : txtBudget.Text;
+                        sw.WriteLine($"預算,{budgetText},");
+
+                        // 接下來才寫入明細
                         foreach (DataGridViewRow row in dgvRecords.Rows)
                         {
                             if (row.Cells["colCategory"].Value != null)
@@ -263,7 +268,7 @@ namespace _1131435_張新誠_個人記帳系統
                             }
                         }
                     }
-                    isUnsaved = false; // 存檔成功，清除未存檔狀態
+                    isUnsaved = false;
                     MessageBox.Show("檔案另存成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
@@ -288,23 +293,31 @@ namespace _1131435_張新誠_個人記帳系統
                     using (StreamReader sr = new StreamReader(openFileDialog.FileName))
                     {
                         string line;
-                        // 修正點：必須使用 while 迴圈一行行指派給 line，直到檔案結束
                         while ((line = sr.ReadLine()) != null)
                         {
                             if (!string.IsNullOrWhiteSpace(line))
                             {
                                 string[] parts = line.Split(',');
-                                if (parts.Length == 3)
+                                if (parts.Length >= 2)
                                 {
-                                    dgvRecords.Rows.Add(parts[0], parts[1], parts[2]);
+                                    // ➕ 核心修改：如果這一行開頭是我們約定好的「預算」標籤
+                                    if (parts[0] == "預算")
+                                    {
+                                        // 把預算數字填回主畫面的 TextBox 裡
+                                        txtBudget.Text = parts[1] == "0" ? "" : parts[1];
+                                    }
+                                    else if (parts.Length == 3) // 否則就是一般的明細列
+                                    {
+                                        dgvRecords.Rows.Add(parts[0], parts[1], parts[2]);
+                                    }
                                 }
                             }
                         }
                     }
 
-                    // 讀取完畢後立刻重新計算總金額
+                    // 讀取完畢後立刻重新計算總金額（因為預算和明細都到位了，會完美觸發超支判定）
                     UpdateTotalAmount();
-                    isUnsaved = false; // 剛讀入的歷史檔案視為已儲存狀態
+                    isUnsaved = false;
                     MessageBox.Show("檔案載入成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)

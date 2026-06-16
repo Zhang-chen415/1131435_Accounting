@@ -57,7 +57,7 @@
             // textBoxAmount
             // 
             this.textBoxAmount.Location = new System.Drawing.Point(81, 52);
-            this.textBoxAmount.MaxLength = 20;
+            this.textBoxAmount.MaxLength = 9;
             this.textBoxAmount.Name = "textBoxAmount";
             this.textBoxAmount.Size = new System.Drawing.Size(100, 22);
             this.textBoxAmount.TabIndex = 2;
@@ -124,7 +124,7 @@
             this.Controls.Add(this.textBoxAmount);
             this.Controls.Add(this.comboBoxCategory);
             this.Name = "Form2";
-            this.Text = "Form2";
+            this.Text = "新增帳目";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.labelTotal = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.檔案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,9 +41,6 @@
             this.更新選取紀錄ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.刪除選取紀錄ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dgvRecords = new System.Windows.Forms.DataGridView();
-            this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtSearchNote = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbFilterCategory = new System.Windows.Forms.ComboBox();
@@ -54,6 +51,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecords)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -155,27 +155,6 @@
             this.dgvRecords.TabIndex = 11;
             this.dgvRecords.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
-            // colCategory
-            // 
-            this.colCategory.HeaderText = "類別";
-            this.colCategory.Name = "colCategory";
-            this.colCategory.ReadOnly = true;
-            this.colCategory.Width = 75;
-            // 
-            // colAmount
-            // 
-            this.colAmount.HeaderText = "金額";
-            this.colAmount.Name = "colAmount";
-            this.colAmount.ReadOnly = true;
-            this.colAmount.Width = 75;
-            // 
-            // colNote
-            // 
-            this.colNote.HeaderText = "備註";
-            this.colNote.Name = "colNote";
-            this.colNote.ReadOnly = true;
-            this.colNote.Width = 150;
-            // 
             // txtSearchNote
             // 
             this.txtSearchNote.Location = new System.Drawing.Point(249, 3);
@@ -225,6 +204,7 @@
             // txtBudget
             // 
             this.txtBudget.Location = new System.Drawing.Point(261, 272);
+            this.txtBudget.MaxLength = 10;
             this.txtBudget.Name = "txtBudget";
             this.txtBudget.Size = new System.Drawing.Size(100, 22);
             this.txtBudget.TabIndex = 16;
@@ -275,28 +255,49 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(313, 312);
+            this.tabPage2.Size = new System.Drawing.Size(367, 312);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "統計圖表";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // chart1
             // 
-            chartArea6.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.chart1.Legends.Add(legend6);
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series6.IsValueShownAsLabel = true;
-            series6.Legend = "Legend1";
-            series6.Name = "Series1";
-            this.chart1.Series.Add(series6);
-            this.chart1.Size = new System.Drawing.Size(300, 300);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series3.IsValueShownAsLabel = true;
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart1.Series.Add(series3);
+            this.chart1.Size = new System.Drawing.Size(361, 300);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
+            // 
+            // colCategory
+            // 
+            this.colCategory.HeaderText = "類別";
+            this.colCategory.Name = "colCategory";
+            this.colCategory.ReadOnly = true;
+            this.colCategory.Width = 80;
+            // 
+            // colAmount
+            // 
+            this.colAmount.HeaderText = "金額";
+            this.colAmount.Name = "colAmount";
+            this.colAmount.ReadOnly = true;
+            this.colAmount.Width = 80;
+            // 
+            // colNote
+            // 
+            this.colNote.HeaderText = "備註";
+            this.colNote.Name = "colNote";
+            this.colNote.ReadOnly = true;
+            this.colNote.Width = 160;
             // 
             // Form1
             // 
@@ -334,9 +335,6 @@
         private System.Windows.Forms.ToolStripMenuItem 更新選取紀錄ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 刪除選取紀錄ToolStripMenuItem;
         private System.Windows.Forms.DataGridView dgvRecords;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCategory;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
         private System.Windows.Forms.TextBox txtSearchNote;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbFilterCategory;
@@ -347,6 +345,9 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCategory;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
     }
 }
 
