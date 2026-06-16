@@ -107,21 +107,21 @@
             // 新增帳目ToolStripMenuItem
             // 
             this.新增帳目ToolStripMenuItem.Name = "新增帳目ToolStripMenuItem";
-            this.新增帳目ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.新增帳目ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.新增帳目ToolStripMenuItem.Text = "新增帳目";
             this.新增帳目ToolStripMenuItem.Click += new System.EventHandler(this.新增帳目ToolStripMenuItem_Click);
             // 
             // 更新選取紀錄ToolStripMenuItem
             // 
             this.更新選取紀錄ToolStripMenuItem.Name = "更新選取紀錄ToolStripMenuItem";
-            this.更新選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.更新選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.更新選取紀錄ToolStripMenuItem.Text = "更新選取紀錄";
             this.更新選取紀錄ToolStripMenuItem.Click += new System.EventHandler(this.更新選取紀錄ToolStripMenuItem_Click);
             // 
             // 刪除選取紀錄ToolStripMenuItem
             // 
             this.刪除選取紀錄ToolStripMenuItem.Name = "刪除選取紀錄ToolStripMenuItem";
-            this.刪除選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.刪除選取紀錄ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.刪除選取紀錄ToolStripMenuItem.Text = "刪除選取紀錄";
             this.刪除選取紀錄ToolStripMenuItem.Click += new System.EventHandler(this.刪除選取紀錄ToolStripMenuItem_Click);
             // 
@@ -135,7 +135,8 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "記帳系統";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

@@ -13,6 +13,7 @@ namespace _1131435_張新誠_個人記帳系統
 {
     public partial class Form1 : Form
     {
+        private bool isUnsaved = false;
         public Form1()
         {
             InitializeComponent();
@@ -90,6 +91,7 @@ namespace _1131435_張新誠_個人記帳系統
 
                 // 更新總金額
                 UpdateTotalAmount();
+                isUnsaved = true;
             }
         }
 
@@ -99,6 +101,7 @@ namespace _1131435_張新誠_個人記帳系統
             if (listBoxRecords.SelectedIndex == -1)
             {
                 MessageBox.Show("請先在清單中點選一筆要刪除的紀錄！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                isUnsaved = true;
                 return;
             }
 
@@ -123,6 +126,7 @@ namespace _1131435_張新誠_個人記帳系統
             if (listBoxRecords.SelectedIndex == -1)
             {
                 MessageBox.Show("請先在清單中點選一筆要修改的紀錄！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                isUnsaved = true;
                 return;
             }
 
@@ -219,13 +223,47 @@ namespace _1131435_張新誠_個人記帳系統
 
                     // 讀取完畢後立刻重新計算總金額
                     UpdateTotalAmount();
-
+                    isUnsaved = false;
                     MessageBox.Show("檔案載入成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"讀取失敗：{ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // 如果發現目前有尚未儲存的變動
+            if (isUnsaved)
+            {
+                // 彈出對話框詢問：要存檔、不存檔、還是取消關閉？
+                DialogResult result = MessageBox.Show(
+                    "您有尚未儲存的記帳紀錄，是否要在關閉前進行儲存？\n\n[是]：進行存檔\n[否]：直接關閉(放棄變動)\n[取消]：回到程式",
+                    "提醒",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    // 使用者想存檔，直接幫他觸發剛才寫好的「另存新檔」選單事件
+                    另存新檔ToolStripMenuItem_Click(sender, e);
+
+                    // 存完檔之後，如果使用者在存檔視窗按了取消，isUnsaved 還會是 true
+                    // 為了保險起見，我們檢查如果還是 true，就攔截不要關閉
+                    if (isUnsaved)
+                    {
+                        e.Cancel = true; // 攔截關閉動作
+                    }
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    // 使用者點選「取消」，代表他不想關閉程式了
+                    e.Cancel = true; // 關鍵：這行可以把關閉視窗的動作攔截、取消掉！
+                }
+                // 如果使用者點選「否」，就什麼都不做，程式會依循預設流程直接關閉，舊資料直接消失
             }
         }
     }

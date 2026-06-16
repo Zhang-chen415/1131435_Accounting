@@ -41,21 +41,21 @@
             // 
             this.comboBoxCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCategory.FormattingEnabled = true;
-            this.comboBoxCategory.Location = new System.Drawing.Point(94, 12);
+            this.comboBoxCategory.Location = new System.Drawing.Point(70, 12);
             this.comboBoxCategory.Name = "comboBoxCategory";
             this.comboBoxCategory.Size = new System.Drawing.Size(121, 20);
             this.comboBoxCategory.TabIndex = 0;
             // 
             // textBoxAmount
             // 
-            this.textBoxAmount.Location = new System.Drawing.Point(105, 52);
+            this.textBoxAmount.Location = new System.Drawing.Point(81, 52);
             this.textBoxAmount.Name = "textBoxAmount";
             this.textBoxAmount.Size = new System.Drawing.Size(100, 22);
             this.textBoxAmount.TabIndex = 2;
             // 
             // textBoxNote
             // 
-            this.textBoxNote.Location = new System.Drawing.Point(105, 94);
+            this.textBoxNote.Location = new System.Drawing.Point(81, 94);
             this.textBoxNote.Name = "textBoxNote";
             this.textBoxNote.Size = new System.Drawing.Size(100, 22);
             this.textBoxNote.TabIndex = 3;
@@ -64,7 +64,7 @@
             // 
             this.labelAmount.AutoSize = true;
             this.labelAmount.Font = new System.Drawing.Font("新細明體", 9F);
-            this.labelAmount.Location = new System.Drawing.Point(52, 55);
+            this.labelAmount.Location = new System.Drawing.Point(28, 55);
             this.labelAmount.Name = "labelAmount";
             this.labelAmount.Size = new System.Drawing.Size(29, 12);
             this.labelAmount.TabIndex = 6;
@@ -74,7 +74,7 @@
             // 
             this.labelNote.AutoSize = true;
             this.labelNote.Font = new System.Drawing.Font("新細明體", 9F);
-            this.labelNote.Location = new System.Drawing.Point(52, 97);
+            this.labelNote.Location = new System.Drawing.Point(28, 97);
             this.labelNote.Name = "labelNote";
             this.labelNote.Size = new System.Drawing.Size(29, 12);
             this.labelNote.TabIndex = 7;
@@ -92,7 +92,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(224, 122);
+            this.buttonCancel.Location = new System.Drawing.Point(181, 122);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(61, 31);
             this.buttonCancel.TabIndex = 9;
@@ -104,7 +104,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(308, 165);
+            this.ClientSize = new System.Drawing.Size(254, 165);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.labelNote);
